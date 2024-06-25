@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 72px;
+            margin-top: 20px;
+        }
+
+        .session-type {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .cont{
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+        .cont button{
+            margin: 0 0 0 5px;
+        }
+        input{
+            padding: 8px 20px;
+            font-size: 20px;
+            border-radius: 12px;
+        }
+
+        #start-button {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        #stop-button {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        #reset-button {
+            background-color: #3498db;
+            color: white;
+        }
+        .tasks{
+            margin-top: 20px;
+        }
+        .tasks div div{
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pomodoro Timer</h1>
+    <div class="cont">
+        <input type="text" placeholder="add new task" id="task">
+        <button id="start-button">Start</button>
+    </div>
+    <div class="timer" id="timer">{{ remaining_time }}</div>
+    <div class="session-type" id="session-type">{{ session_type }}</div>
+    <button id="stop-button">Stop</button>
+    <button id="continue-button">continue</button>
+    <button id="reset-button">Reset</button>
+    <div class="tasks">
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+            let intervalId; 
+            let startTime; 
+            let currentTimeInSeconds
+        function updateTimer() {
+            currentTimeInSeconds--;
+            const remainingTime = Math.max(0,  currentTimeInSeconds - startTime);
+            if (isNaN(remainingTime)) 
+                remainingTime = 0;
+            if(currentTimeInSeconds == startTime){
+                console.log("end")
+                addTask()
+            }
+        
+            $('#timer').text(remainingTime);
+      }
+      
+      function addTask(){
+        const task = $("#task").val();
+        $.ajax({
+            url: "/add_task",
+            type: "POST",
+            data: JSON.stringify({ task }),
+            contentType: "application/json; charset=utf-8",
+            success: function(response) {
+                console.log("res", response.message)
+                displayTasks(response.message)
+            },
+        });
+        $('#task').val('');
+      }
+
+    function displayTasks(tasks) {
+        console.log(tasks)
+        $('.tasks').empty();
+        tasks.forEach((task, index) => {
+            const li = document.createElement('div');
+            $(li).text(`${index} - ${task.task}`); 
+
+            const ol = document.createElement('div');
+            ol.append(li);
+
+            $('.tasks').append(ol);
+        });
+    }
+        $(document).ready(function() {
+            $('#start-button').click(function() {
+                $.ajax({
+                    url: '/ajax/click',
+                    method: 'POST',
+                    data: { action: 'start' },
+                    success: function(response) {
+                        startTime = Math.floor(response.startTime);
+                        currentTimeInSeconds = Math.floor(startTime + 5)
+                        console.log("response", response.startTime);
+                    }
+                });
+
+                intervalId = setInterval(updateTimer, 1000);
+            });
+
+            $('#stop-button').click(function() {
+                $.ajax({
+                    url: '/ajax/click',
+                    method: 'POST',
+                    data: { action: 'stop' },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+                clearInterval(intervalId);
+            });
+            $('#continue-button').click(function() {
+                $.ajax({
+                    url: '/ajax/click',
+                    method: 'POST',
+                    data: { action: 'continue' },
+                    success: function(response) {
+                        console.log(response.startTime)
+                        startTime = response.startTime
+                    }
+                });
+                intervalId = setInterval(updateTimer, 1000)
+            });
+
+            $('#reset-button').click(function() {
+                $.ajax({
+                    url: '/ajax/click',
+                    method: 'POST',
+                    data: { action: 'reset' },
+                    success: function(response) {
+                        console.log(response);
+                        $('#timer').text(0);
+                        $('#session-type').text('Pomodoro');
+                    }
+                });
+                clearInterval(intervalId);
+            });
+            updateTimer();
+        });
+    </script>
+</body>
+</html>
