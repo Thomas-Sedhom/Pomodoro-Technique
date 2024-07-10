@@ -1,12 +1,14 @@
-from flask import Flask, jsonify, render_template, request
 import time
-app = Flask(__name__)
+from flask import Flask, jsonify, render_template, request
 
+app = Flask(__name__)
 Pomodoro_duration = 25 * 60
 session_type = "Pomodoro"
 start_time = None
 temp_time = None
 tasks = []
+
+
 @app.route("/")
 def index():
     remaining_time = 0
@@ -71,4 +73,4 @@ def handle_click():
     return "Invalid action"
 
 if __name__ == '__main__':
-    app.run(debug=True)  
+    app.run(host='0.0.0.0', port=5000, debug=True)  
