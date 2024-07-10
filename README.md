@@ -44,6 +44,7 @@
    python -m unittest main.py
   ```
 # Virtualize application with docker
+https://hub.docker.com/r/thomasrsc/pomodoro/tags
 ## First install Docker in your local machine 
 ### Uninstall all conflicting packages
 ```
