@@ -130,3 +130,7 @@ docker login -u userName
 docker tag imgID docker/getting-started
 docker push docker/getting-started
 ```
+
+###
+# Continuous Integration and Deployment pipeline Status"
+ ![CI/CD](https://github.com/Thomas-Sedhom/Pomodoro-Technique/actions/workflows/ci.yml/badge.svg)
