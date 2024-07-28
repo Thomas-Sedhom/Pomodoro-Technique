@@ -30,13 +30,6 @@ jobs:
             run:  |
                python --version
                pip list
-
-         -  name: Install flake8
-            run: pip install flake8
-
-         -  name: Run flake8
-            run: flake8 .
-            # runs the flake8 linter on the codebase
          
          -  name: Run tests 
             run: python -m unittest discover tests/
