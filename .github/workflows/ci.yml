@@ -3,7 +3,7 @@ name: CI/CD Pipline
 on:
   push:
       branches:
-         -  main
+         -  master
          # This section defines the trigger for the workflow. In this case, it will run whenever a push is made to the main branch.
 jobs:
 
