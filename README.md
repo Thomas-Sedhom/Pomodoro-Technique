@@ -96,7 +96,7 @@ EXPOSE 5000
 # Command to run your application
 CMD ["python", "main.py"]
 ```
-# create group and user to access to build and run Docker file
+# Create group and user to access to build and run Docker file
 ```
 # create "docker" group
 sudo groupadd docker
@@ -109,13 +109,13 @@ sudo usermod -aG docker $USER
 ```
 docker build --tag "image-name"
 ```
-# run docker file
+# Run docker file
 ```
 # the docker run command is what actually #brings that image to life. It takes the image #and starts a container instance based on its #instructions. This allows you to run the #application defined in the image.
 
 docker run "image-name"
 ```
-# create .dockerignore file 
+# Create .dockerignore file 
 ```
 touch .dockerignore file
 ```
@@ -134,3 +134,50 @@ docker push docker/getting-started
 ###
 # Continuous Integration and Deployment pipeline Status"
  ![CI/CD](https://github.com/Thomas-Sedhom/Pomodoro-Technique/actions/workflows/ci.yml/badge.svg)
+
+ # Infrustructure as a code
+ creating an instance on aws cloud provider by terraform
+
+  1- install terraform
+ ```
+ cd /tmp
+export RELEASE=$(curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | jq -r '.tag_name')
+RELEASE="${RELEASE:1}" # Remove the 'v'
+wget "https://releases.hashicorp.com/terraform/${RELEASE}/terraform_${RELEASE}_linux_amd64.zip"
+unzip terraform_${RELEASE}_linux_amd64.zip
+sudo mv terraform /usr/local/bin
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws configure
+```
+
+2- write main.tf file to create resources
+```
+cd ./terraform/main.tf
+```
+
+3- initialize and run terraform 
+
+```
+terraform init 
+terraform apply
+```
+ # Configration management
+create a configration file by Ansible to deploy our project on AWS instance 
+1- install ansible 
+```
+pipx install --include-deps ansible
+pipx install ansible-core
+```
+
+2- create a main.yml file which have all tasks 
+```
+/ansible/main.yml
+```
+
+3- run ansible playbook
+```
+ansible-playbook main.yml -vvvv
+```

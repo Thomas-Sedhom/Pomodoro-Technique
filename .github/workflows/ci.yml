@@ -105,3 +105,26 @@ jobs:
          -  name: Image digest
             run: echo ${{ steps.docker_build.outputs.digest }}
 
+   deploy:
+      needs: publish-tagged-image
+      runs-on: ubuntu-latest
+      steps:
+         -  name: Checkout code
+            uses: actions/checkout@v4
+
+         -  name: Set up Python
+            uses: actions/setup-python@v5
+            with:
+               python-version: "3.9"
+
+         -  name: Install Ansible
+            run: pipx install --include-deps ansible
+
+         -  name: Run Terraform
+            run: |
+               cd terraform
+               terraform init
+               terraform apply -auto-approve
+
+         -  name: Run Ansible Playbook
+            run: ansible-playbook ansible/main.yml -vvvv

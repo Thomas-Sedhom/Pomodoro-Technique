@@ -1,0 +1,49 @@
+# This Ansible task is designed to ensure that certain software packages, 
+# which are necessary for the subsequent installation and management of Docker, 
+---
+- name: Install prerequisites
+  # manages packages on systems that use the apt package manager, such as Debian or Ubuntu
+  ansible.builtin.apt:
+    name:
+      # Enables the use of HTTPS in APT repositories.
+      - apt-transport-https
+      # Manages CA certificates for verifying SSL connections.
+      - ca-certificates
+      # A command-line tool for transferring data using various protocols (used later to download the Docker GPG key).
+      - curl
+      # Manages OpenPGP keys, needed for verifying the authenticity of software packages.
+      - gnupg-agent
+      # Provides tools to manage software repositories, such as adding or removing PPAs
+      - software-properties-common
+    update_cache: true
+
+- name: Download Docker GPG key
+  # Executes shell commands directly.
+  ansible.builtin.shell: |
+    curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+  register: download_key
+
+- name: Add docker repo
+  # Docker’s official APT repository to the system’s software sources
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/debian bookworm stable
+
+- name: Install docker
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    update_cache: true
+
+- name: Add user permissions
+  # Adds the user thomas to the docker group to allow running Docker commands without sudo.
+  ansible.builtin.user:
+    name: "thomas"
+    append: true
+    groups: docker
+
+# Resets the SSH connection to apply the user group changes
+- name: Reset SSH connection
+  ansible.builtin.meta: "reset_connection"
+
