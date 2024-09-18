@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pomodoro-dep
+  namespace: pomodoro-ns
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pomodoro
+
+  template:
+    metadata:
+      labels:
+        app: pomodoro
+
+    spec:
+      containers:
+        - name: pomodoro
+          image: thomasrsc/pomd
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              cpu: "2048m"
+              memory: "4048Mi"
+            requests:
+              cpu: "1024m"
+              memory: "2048Mi"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#                apiVersion: apps/v1
+# Specifies the version of the Kubernetes API you're using to create the deployment. In this case, it's apps/v1, which is the current version for deployments.
+# 2. kind: Deployment
+# This defines the type of Kubernetes object you want to create. Here, it's a Deployment, which manages the rollout and scaling of a set of pods.
+# 3. metadata:
+# name: palestine-dep: This is the name of the deployment resource, and it's set to palestine-dep. The name helps to identify this specific deployment.
+# namespace: Pomodoro: This specifies the namespace in which the deployment will be created. Namespaces in Kubernetes allow you to group resources logically, like creating different environments (development, staging, production).
+# 4. spec:
+# The spec field defines the specifications of the deployment, which include how many replicas to run and the pod configuration.
+# a. replicas: 3
+# This defines the number of pod replicas that the deployment should maintain. Here, 3 pods will be running for redundancy and load balancing.
+# b. selector:
+# The selector is used to identify which pods this deployment is managing. It selects the pods based on a matching label.
+
+# matchLabels:
+# app: pomdoro: This label (app: pomdoro) is used to match the pods created by the deployment. Any pod that has this label will be part of the deployment.
+# 5. template:
+# The template field describes the pod's specifications that will be created by the deployment.
+# a. metadata:
+# labels:
+# app: pomdoro: The pods created by this deployment will be labeled with app: pomdoro. This label will be used to select and manage the pods.
+# b. spec:
+# Describes the containers and settings inside the pod.
+
+# i. containers:
+# The list of containers that will run inside each pod.
+
+# name: app: pomdoro: This defines the name of the container within the pod. The naming format might have a typo as name: app: pomdoro. It should probably just be name: pomdoro.
+# image: thomasrsc/pomd: Specifies the Docker image to use for this container. In this case, it's thomasrsc/pomd, which could be your custom-built image stored on a Docker registry.
+# ports:
+# containerPort: 5000: Defines the port on which the container listens. The Flask app is probably running on port 5000.
+# ii. resources:
+# Defines the resource limits and requests for the container.
+
+# limits:
+# cpu: "2048m": Limits the maximum CPU usage for the container to 2048 millicores (2 cores).
+# memory: "4048Mi": Limits the maximum memory usage to 4048Mi (about 4GB).
+# requests:
+# cpu: "1024m": Requests at least 1024 millicores (1 core) to run the container.
+# memory: "2048Mi": Requests at least 2048Mi (about 2GB) of memory.
+# The
+
+# resource limits and requests section helps Kubernetes manage resources more efficiently. The requests define the minimum resources the container needs to run, while the limits specify the maximum amount of resources it can consume. Kubernetes uses these settings to schedule the pod on nodes that can fulfill these requirements.
+
+# This way, your container will get a minimum of 1 CPU core and 2GB of memory, and it won't be allowed to use more than 2 CPU cores and 4GB of memory. This helps ensure that your container doesn't overuse resources and negatively affect other containers running on the same node.
+
+# Let me know if you need further clarification!

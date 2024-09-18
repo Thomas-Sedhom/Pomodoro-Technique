@@ -8,7 +8,6 @@ on:
          -  '*'
          # This section defines the trigger for the workflow. In this case, it will run whenever a push is made to the main branch.
 jobs:
-
    lint-and-test:
       runs-on: ubuntu-latest
       #  This starts the definition of the first job, called "lint-and-test". The runs-on: ubuntu-latest line specifies that this job will run on an Ubuntu Linux virtual environment.

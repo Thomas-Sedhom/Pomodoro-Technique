@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+
+kind: Ingress
+
+metadata:
+  name: pomodoro-ingress
+  namespace: pomodoro-ns
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: pomdoro.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pomodoro-svc
+            port:
+              number: 5000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # //This tells Kubernetes to use the Nginx Ingress controller to manage this Ingress.
+  # // Nginx will act as the HTTP/HTTPS load balancer to route traffic.

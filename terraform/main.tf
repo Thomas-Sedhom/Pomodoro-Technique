@@ -21,8 +21,3 @@ resource "aws_instance" "pomodoro" {
     Name = "pomodoro"
   }
 }
-
-// terraform init 
-// terraform apply
-
-// terraform destroy
