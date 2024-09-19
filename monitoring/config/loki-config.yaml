@@ -10,14 +10,16 @@ common:
   path_prefix: /loki
   storage:
     filesystem:
-      chunks_directory: /loki/chunks
+    # compressed blocks of logs
+      chunks_directory: /loki/chunks 
+    # alerting or recording rules
       rules_directory: /loki/rules
   replication_factor: 1
   ring:
     kvstore:
       store: inmemory
 
-schema_config:
+schema_config:s
   configs:
     - from: 2020-10-24
       store: tsdb
