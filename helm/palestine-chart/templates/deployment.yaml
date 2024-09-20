@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: palestine-dep
+  name: pomodoro-dep
   labels:
-    app: palestine
+    app: pomodoro
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: palestine
+      app: pomodoro
   template:
     metadata:
       labels:
-        app: palestine
+        app: pomodoro
     spec:
       containers:  
-      - name: palestine
+      - name: pomodoro
         image: {{ .Values.image }}
         ports:
         - containerPort: {{ .Values.containerPort }}

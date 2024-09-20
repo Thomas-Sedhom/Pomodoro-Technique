@@ -5,7 +5,7 @@
 replicaCount: 2
 
 # Application image and tag
-image: mustafa3li/palestine:latest
+image: thomasrsc/pomd
 
 # Port exposed by application container
 containerPort: 8000
