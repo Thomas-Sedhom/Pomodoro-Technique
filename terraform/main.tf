@@ -9,13 +9,14 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 resource "aws_instance" "pomodoro" {
-  ami           = "ami-04a81a99f5ec58529" # Ubuntu 24.04 LTS (us-east-1)
-  instance_type = "t2.micro"
-  availability_zone = "us-east-1a"
+  ami           = var.ami              # Reference the ami variable
+  instance_type = var.instance_type    # Reference the instance_type variable
+  availability_zone = "us-east-1a"     # This can also be made a variable if needed
+  key_name     = var.key_name          # Reference the key_name variable
 
   tags = {
     Name = "pomodoro"
